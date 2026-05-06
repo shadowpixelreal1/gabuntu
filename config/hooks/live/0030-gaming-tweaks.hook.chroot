@@ -1,0 +1,90 @@
+#!/bin/bash
+# ============================================================
+# Hook: Kernel & system tuning for gaming performance
+# ============================================================
+set -euo pipefail
+
+echo "[GaBuntu] Applying gaming performance tweaks..."
+
+# --- Kernel parameters (sysctl) ---
+cat > /etc/sysctl.d/99-gabuntu.conf << 'EOF'
+# GaBuntu Gaming Tweaks
+
+# Increase max open file descriptors (helps with large games)
+fs.file-max = 524288
+
+# Better memory management for gaming
+vm.swappiness = 10
+vm.dirty_ratio = 15
+vm.dirty_background_ratio = 5
+
+# Increase mmap count (required by some games, e.g. Elden Ring, DOTA 2)
+vm.max_map_count = 2147483642
+
+# Network performance (helps with online gaming)
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_fastopen = 3
+
+# Reduce latency
+kernel.sched_autogroup_enabled = 0
+EOF
+
+# --- File descriptor limits ---
+cat > /etc/security/limits.d/99-gabuntu.conf << 'EOF'
+# GaBuntu — raise file descriptor limits
+*    soft nofile 524288
+*    hard nofile 524288
+root soft nofile 524288
+root hard nofile 524288
+EOF
+
+# --- CPU governor: prefer performance ---
+cat > /etc/default/cpufrequtils << 'EOF'
+GOVERNOR="performance"
+EOF
+
+# --- Environment variables for gaming ---
+cat > /etc/environment.d/99-gabuntu.conf << 'EOF'
+# Enable GameMode for all users
+LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgamemodeauto.so.0
+# Mesa performance hints
+mesa_glthread=true
+MESA_NO_ERROR=1
+# MangoHud default position
+MANGOHUD_CONFIG=position=top-left,fps,gpu_stats,cpu_stats,ram,frametime,wine
+EOF
+
+# --- GameMode configuration ---
+mkdir -p /etc/gamemode.ini
+cat > /etc/gamemode.ini << 'EOF'
+[general]
+reaper_freq=5
+desiredgov=performance
+igpu_desiredgov=performance
+defaultgov=powersave
+softrealtime=auto
+renice=-10
+ioprio=0
+
+[filter]
+whitelist=
+blacklist=
+
+[gpu]
+apply_gpu_optimisations=accept-responsibility
+gpu_device=0
+amd_performance_level=high
+
+[cpu]
+park_cores=no
+pin_cores=yes
+EOF
+
+# --- zRAM for better memory under gaming load ---
+cat > /etc/default/zramswap << 'EOF'
+ALGO=lz4
+PERCENT=25
+EOF
+
+echo "[GaBuntu] Kernel tweaks applied."
