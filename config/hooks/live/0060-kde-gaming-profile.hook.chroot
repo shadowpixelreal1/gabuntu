@@ -1,0 +1,82 @@
+#!/bin/bash
+# ============================================================
+# Hook: KDE Plasma gaming-focused defaults
+# ============================================================
+set -euo pipefail
+
+echo "[GaBuntu] Configuring KDE Plasma gaming defaults..."
+
+# Create skel (default user) KDE config directory
+mkdir -p /etc/skel/.config
+
+# --- KDE global shortcuts for common gaming actions ---
+cat > /etc/skel/.config/kglobalshortcutsrc << 'EOF'
+[MangoHud]
+Toggle=Meta+F12,none,Toggle MangoHud Overlay
+
+[GameMode]
+Activate=,none,Activate GameMode
+
+[kwin]
+Kill Window=Meta+Ctrl+Escape,Meta+Ctrl+Escape,Kill Window
+EOF
+
+# --- KDE compositor: disable for gaming (better FPS), easy to re-enable ---
+cat > /etc/skel/.config/kwinrc << 'EOF'
+[Compositing]
+Enabled=true
+Backend=OpenGL
+GLCore=true
+HiddenPreviews=5
+OpenGLIsUnsafe=false
+WindowsBlockCompositing=true
+
+[Effect-blur]
+BlurStrength=4
+
+[Plugins]
+blurEnabled=true
+contrastEnabled=true
+kwin4_effect_fadeEnabled=false
+kwin4_effect_scaleinEnabled=false
+EOF
+
+# --- SDDM theme config ---
+cat > /etc/sddm.conf.d/gabuntu.conf << 'EOF'
+[Theme]
+Current=breeze
+
+[General]
+HaltCommand=/usr/bin/systemctl poweroff
+RebootCommand=/usr/bin/systemctl reboot
+EOF
+
+# --- KDE power profile: performance by default ---
+cat > /etc/skel/.config/powerdevilrc << 'EOF'
+[AC][Performance]
+profileIcon=preferences-system-power-performance
+
+[AC]
+profile=Performance
+EOF
+
+# --- Set wallpaper reference (wallpaper file added separately) ---
+mkdir -p /usr/share/wallpapers/GaBuntu
+# Wallpaper will be a dark gaming-themed image (see includes.chroot)
+
+# --- KDE Plasma color scheme: dark theme for gaming ---
+cat > /etc/skel/.config/kdeglobals << 'EOF'
+[General]
+ColorScheme=BreezeDark
+Name=Breeze Dark
+shadeSortColumn=true
+
+[Icons]
+Theme=breeze-dark
+
+[KDE]
+LookAndFeelPackage=org.kde.breezedark.desktop
+SingleClick=false
+EOF
+
+echo "[GaBuntu] KDE gaming profile configured."
