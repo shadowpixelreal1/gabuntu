@@ -1,0 +1,56 @@
+# ============================================================
+# GaBuntu — KDE Plasma Desktop Environment
+# ============================================================
+
+# Core KDE Plasma
+kde-plasma-desktop
+plasma-workspace
+plasma-nm
+plasma-pa
+plasma-browser-integration
+kde-spectacle
+dolphin
+konsole
+kate
+ark
+gwenview
+okular
+kdeconnect
+kscreen
+sddm
+sddm-theme-breeze
+breeze
+breeze-gtk-theme
+plasma-theme-oxygen
+kde-standard
+kinfocenter
+ksysguard
+systemsettings
+
+# Fonts
+fonts-noto
+fonts-noto-color-emoji
+fonts-liberation
+ttf-mscorefonts-installer
+
+# File manager extras
+ffmpegthumbs
+kdegraphics-thumbnailers
+
+# Archiving
+p7zip-full
+unrar
+unzip
+zip
+
+# Networking
+network-manager
+network-manager-gnome
+curl
+wget
+
+# System utilities
+htop
+neofetch
+gparted
+baobab
