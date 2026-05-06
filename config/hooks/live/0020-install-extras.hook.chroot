@@ -1,0 +1,46 @@
+#!/bin/bash
+# ============================================================
+# Hook: Install extra packages that need special handling
+# ============================================================
+set -euo pipefail
+
+export DEBIAN_FRONTEND=noninteractive
+
+echo "[GaBuntu] Installing extra packages..."
+
+# Lutris (from PPA)
+apt-get install -y lutris || echo "[WARNING] Lutris install failed"
+
+# Heroic Games Launcher (from downloaded .deb)
+if [ -f /tmp/heroic.deb ]; then
+    dpkg -i /tmp/heroic.deb || apt-get install -fy
+    rm -f /tmp/heroic.deb
+fi
+
+# Discord (from downloaded .deb)
+if [ -f /tmp/discord.deb ]; then
+    dpkg -i /tmp/discord.deb || apt-get install -fy
+    rm -f /tmp/discord.deb
+fi
+
+# NVIDIA driver (535 — supports GTX 900 series and newer)
+apt-get install -y \
+    nvidia-driver-535 \
+    nvidia-dkms-535 \
+    nvidia-settings \
+    nvidia-prime \
+    libnvidia-compute-535 \
+    libnvidia-compute-535:i386 \
+    || echo "[WARNING] NVIDIA driver install failed — may not be needed on this system"
+
+# 32-bit Vulkan / OpenGL (needed for Steam + Wine games)
+apt-get install -y \
+    libvulkan1:i386 \
+    mesa-vulkan-drivers:i386 \
+    libgl1-mesa-dri:i386 \
+    || true
+
+# ds4drv — DualShock 4 driver
+pip3 install ds4drv || echo "[WARNING] ds4drv install failed"
+
+echo "[GaBuntu] Extra packages installed."
