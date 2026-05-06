@@ -1,0 +1,56 @@
+# ============================================================
+# GaBuntu — Base System & Utilities
+# ============================================================
+
+# Boot & init
+grub-efi-amd64
+grub-pc-bin
+efibootmgr
+os-prober
+
+# Core system
+ubuntu-standard
+ubuntu-minimal
+systemd
+dbus
+
+# Security
+ufw
+apparmor
+
+# Hardware support
+usbutils
+pciutils
+lshw
+dmidecode
+hdparm
+nvme-cli
+smartmontools
+
+# Performance / scheduler
+cpufrequtils
+powertop
+thermald
+tlp
+
+# Memory / swap
+earlyoom
+zram-config
+
+# Network
+openssh-client
+nfs-common
+samba-common-bin
+
+# Development (minimal, for gaming tools that compile)
+build-essential
+cmake
+git
+python3
+python3-pip
+
+# Live system tools
+live-boot
+live-config
+live-config-systemd
+user-setup
