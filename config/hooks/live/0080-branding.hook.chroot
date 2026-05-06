@@ -1,0 +1,78 @@
+#!/bin/bash
+# ============================================================
+# Hook: GaBuntu branding & OS identity
+# ============================================================
+set -euo pipefail
+
+echo "[GaBuntu] Applying branding..."
+
+# --- OS release info ---
+cat > /etc/os-release << 'EOF'
+NAME="GaBuntu"
+PRETTY_NAME="GaBuntu 24.04 LTS"
+VERSION="24.04 LTS (Noble Numbat)"
+VERSION_ID="24.04"
+ID=gabuntu
+ID_LIKE=ubuntu
+HOME_URL="https://github.com/your-org/gabuntu"
+SUPPORT_URL="https://github.com/your-org/gabuntu/issues"
+BUG_REPORT_URL="https://github.com/your-org/gabuntu/issues"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+EOF
+
+# --- lsb_release ---
+cat > /etc/lsb-release << 'EOF'
+DISTRIB_ID=GaBuntu
+DISTRIB_RELEASE=24.04
+DISTRIB_CODENAME=noble
+DISTRIB_DESCRIPTION="GaBuntu 24.04 LTS"
+EOF
+
+# --- /etc/issue (terminal login banner) ---
+cat > /etc/issue << 'EOF'
+
+  ██████╗  █████╗ ███╗   ███╗███████╗██████╗ ██╗   ██╗███╗   ██╗████████╗██╗   ██╗
+ ██╔════╝ ██╔══██╗████╗ ████║██╔════╝██╔══██╗██║   ██║████╗  ██║╚══██╔══╝██║   ██║
+ ██║  ███╗███████║██╔████╔██║█████╗  ██████╔╝██║   ██║██╔██╗ ██║   ██║   ██║   ██║
+ ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██╔══██╗██║   ██║██║╚██╗██║   ██║   ██║   ██║
+ ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██████╔╝╚██████╔╝██║ ╚████║   ██║   ╚██████╔╝
+  ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝    ╚═════╝
+
+  Ubuntu-based Gaming OS  |  KDE Plasma  |  Steam + Lutris + Wine + GE-Proton
+
+EOF
+
+# --- Hostname ---
+echo "gabuntu" > /etc/hostname
+
+cat > /etc/hosts << 'EOF'
+127.0.0.1   localhost
+127.0.1.1   gabuntu
+::1         localhost ip6-localhost ip6-loopback
+ff02::1     ip6-allnodes
+ff02::2     ip6-allrouters
+EOF
+
+# --- neofetch config for gaming info display ---
+mkdir -p /etc/skel/.config/neofetch
+cat > /etc/skel/.config/neofetch/config.conf << 'EOF'
+print_info() {
+    info title
+    info underline
+    info "OS" distro
+    info "Host" model
+    info "Kernel" kernel
+    info "Uptime" uptime
+    info "CPU" cpu
+    info "GPU" gpu
+    info "Memory" memory
+    info "Disk" disk
+    info "Resolution" resolution
+    prin "Steam" "$(steam --version 2>/dev/null | head -1 || echo 'Installed')"
+    prin "Wine" "$(wine --version 2>/dev/null || echo 'Installed')"
+    info cols
+}
+EOF
+
+echo "[GaBuntu] Branding applied."
