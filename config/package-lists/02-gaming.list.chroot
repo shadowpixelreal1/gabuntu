@@ -1,0 +1,91 @@
+# ============================================================
+# GaBuntu — Core Gaming Stack
+# ============================================================
+
+# Steam
+steam
+steam-devices
+
+# Lutris (installed via hook from PPA — listed here for reference)
+# lutris  <- added via hook
+
+# Wine + Proton dependencies
+wine64
+wine32
+winetricks
+winbind
+cabextract
+playonlinux
+
+# Gaming performance
+gamemode
+libgamemode0
+libgamemodeauto0
+gamescope
+
+# GPU performance & monitoring
+mangohud
+goverlay
+vkbasalt
+
+# Vulkan & graphics
+vulkan-tools
+vulkan-validationlayers
+mesa-vulkan-drivers
+mesa-utils
+
+# DirectX / translation layers
+dxvk-native
+
+# Controller / input support
+joystick
+jstest-gtk
+antimicro
+qjoypad
+evtest
+libhidapi-hidraw0
+libhidapi-libusb0
+
+# DS4 / DualShock / DualSense
+# ds4drv — installed via hook (pip)
+
+# Xbox controller
+xboxdrv
+
+# Audio (PipeWire replaces PulseAudio)
+pipewire
+pipewire-pulse
+pipewire-alsa
+pipewire-jack
+wireplumber
+pavucontrol-qt
+
+# Video playback / codecs
+vlc
+ffmpeg
+gstreamer1.0-plugins-bad
+gstreamer1.0-plugins-ugly
+gstreamer1.0-libav
+libavcodec-extra
+
+# Game launchers & tools
+heroic-games-launcher-bin
+# ^ installed via .deb in hook if not in repo
+
+# Discord (installed via hook)
+# discord
+
+# Flatpak support
+flatpak
+plasma-discover-backend-flatpak
+
+# RetroArch (retro gaming)
+retroarch
+libretro-nestopia
+libretro-snes9x
+libretro-genesis-plus-gx
+libretro-beetle-psx
+
+# Misc gaming utils
+scummvm
+dosbox
