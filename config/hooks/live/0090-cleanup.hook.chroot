@@ -1,0 +1,30 @@
+#!/bin/bash
+# ============================================================
+# Hook: Final cleanup — reduce ISO size
+# ============================================================
+set -euo pipefail
+
+echo "[GaBuntu] Running cleanup to reduce ISO size..."
+
+# Remove apt cache
+apt-get clean
+rm -rf /var/cache/apt/archives/*
+rm -rf /var/lib/apt/lists/*
+
+# Remove unnecessary locale data (keep en + user locales)
+localepurge || true
+
+# Remove temp files
+rm -rf /tmp/* /var/tmp/*
+
+# Remove build-time logs
+rm -rf /var/log/dpkg.log /var/log/apt/
+
+# Remove kernel crash dumps
+rm -rf /var/crash/*
+
+# Remove Python bytecode cache
+find / -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+find / -name "*.pyc" -delete 2>/dev/null || true
+
+echo "[GaBuntu] Cleanup complete. ISO size reduced."
