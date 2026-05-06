@@ -1,0 +1,37 @@
+#!/bin/bash
+# ============================================================
+# Hook: PipeWire audio setup (low-latency for gaming)
+# ============================================================
+set -euo pipefail
+
+echo "[GaBuntu] Configuring PipeWire low-latency audio..."
+
+# Disable PulseAudio (PipeWire replaces it)
+systemctl --global disable pulseaudio.service pulseaudio.socket 2>/dev/null || true
+
+# Enable PipeWire globally
+systemctl --global enable pipewire.service pipewire.socket 2>/dev/null || true
+systemctl --global enable pipewire-pulse.service pipewire-pulse.socket 2>/dev/null || true
+systemctl --global enable wireplumber.service 2>/dev/null || true
+
+# Low-latency PipeWire config (48kHz, 128 sample quantum = ~2.7ms latency)
+mkdir -p /etc/pipewire/pipewire.conf.d
+cat > /etc/pipewire/pipewire.conf.d/99-gabuntu-latency.conf << 'EOF'
+context.properties = {
+    default.clock.rate          = 48000
+    default.clock.allowed-rates = [ 44100 48000 96000 ]
+    default.clock.quantum       = 128
+    default.clock.min-quantum   = 32
+    default.clock.max-quantum   = 8192
+}
+EOF
+
+# JACK config for pro-audio users
+mkdir -p /etc/pipewire/jack.conf.d
+cat > /etc/pipewire/jack.conf.d/99-gabuntu.conf << 'EOF'
+jack.properties = {
+    node.latency = 128/48000
+}
+EOF
+
+echo "[GaBuntu] PipeWire audio configured."
