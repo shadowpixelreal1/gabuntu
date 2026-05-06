@@ -1,0 +1,34 @@
+#!/bin/bash
+# ============================================================
+# Hook: Add third-party repositories
+# ============================================================
+set -euo pipefail
+
+export DEBIAN_FRONTEND=noninteractive
+
+echo "[GaBuntu] Adding third-party repositories..."
+
+# Enable 32-bit architecture (required for Steam, Wine)
+dpkg --add-architecture i386
+
+# --- Lutris PPA ---
+add-apt-repository -y ppa:lutris-team/lutris
+
+# --- Heroic Games Launcher (GitHub release, via curl) ---
+HEROIC_VER="2.14.0"
+curl -fsSL "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${HEROIC_VER}/heroic_${HEROIC_VER}_amd64.deb" \
+    -o /tmp/heroic.deb || echo "[WARNING] Could not download Heroic, skipping"
+
+# --- Discord ---
+curl -fsSL "https://discord.com/api/download?platform=linux&format=deb" \
+    -o /tmp/discord.deb || echo "[WARNING] Could not download Discord, skipping"
+
+# --- ProtonUp-Qt (via pip — Flatpak version preferred but this is a fallback) ---
+# Will be installed via Flatpak in a later hook
+
+# --- Flathub ---
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || true
+
+apt-get update -qq
+
+echo "[GaBuntu] Repos added successfully."
