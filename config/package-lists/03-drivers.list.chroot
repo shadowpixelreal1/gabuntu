@@ -1,0 +1,41 @@
+# ============================================================
+# GaBuntu — GPU Drivers (NVIDIA + AMD + Intel)
+# ============================================================
+
+# --- AMD (Mesa open-source, always good to have) ---
+mesa-opencl-icd
+libdrm-amdgpu1
+xserver-xorg-video-amdgpu
+radeontop
+
+# --- Intel ---
+intel-media-va-driver
+i965-va-driver
+vainfo
+intel-gpu-tools
+
+# --- NVIDIA (proprietary, installed via hook) ---
+# nvidia-driver-535        <- installed by hook (supports 900+ series)
+# nvidia-dkms              <- installed by hook
+# nvidia-prime             <- for hybrid laptops
+# nvidia-settings
+# cuda-toolkit (optional)
+
+# --- Common GPU / compute ---
+ocl-icd-opencl-dev
+clinfo
+libva-utils
+
+# --- Firmware ---
+linux-firmware
+firmware-linux-free
+amd64-microcode
+intel-microcode
+
+# --- Kernel headers (for DKMS modules like NVIDIA) ---
+linux-headers-generic
+
+# --- VFIO / GPU passthrough extras (advanced users) ---
+# ovmf
+# qemu-kvm
+# libvirt-daemon-system
