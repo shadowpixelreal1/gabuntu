@@ -1,0 +1,25 @@
+#!/bin/bash
+# ============================================================
+# Hook: Install GE-Proton (community Proton with extra patches)
+# ============================================================
+set -euo pipefail
+
+echo "[GaBuntu] Installing GE-Proton..."
+
+PROTON_GE_VERSION="GE-Proton9-20"
+PROTON_GE_URL="https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${PROTON_GE_VERSION}/${PROTON_GE_VERSION}.tar.gz"
+INSTALL_DIR="/usr/share/steam/compatibilitytools.d"
+
+mkdir -p "${INSTALL_DIR}"
+
+curl -fsSL "${PROTON_GE_URL}" -o /tmp/proton-ge.tar.gz \
+    && tar -xzf /tmp/proton-ge.tar.gz -C "${INSTALL_DIR}" \
+    && rm -f /tmp/proton-ge.tar.gz \
+    && echo "[GaBuntu] GE-Proton ${PROTON_GE_VERSION} installed to ${INSTALL_DIR}" \
+    || echo "[WARNING] Could not download GE-Proton — user can install via ProtonUp-Qt"
+
+# Also install ProtonUp-Qt via Flatpak (for easy Proton management)
+flatpak install -y flathub net.davidotek.pupgui2 2>/dev/null \
+    || echo "[WARNING] ProtonUp-Qt flatpak install failed — try after boot"
+
+echo "[GaBuntu] GE-Proton setup complete."
